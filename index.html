@@ -20,8 +20,9 @@
         cursor: pointer;
       }
       h1 {
-        text-align: center;
+        display: inline-block;
         font-size: 2.5em;
+        margin-right: 20px;
       }
       h3 {
         font-size: 2em;
@@ -32,52 +33,58 @@
       .nora * {
         color: purple;
       }
+      #resetButton {
+        font-size: 1em;
+        padding: 10px 20px;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
     <h1>Bedtime Checklist</h1>
+    <button id="resetButton">Reset</button>
     <ol class="checklist">
       <li>
-        <label><input type="checkbox" />Eat Dinner</label>
+        <label><input type="checkbox" id="eatDinner" />Eat Dinner</label>
       </li>
       <li>
-        <label><input type="checkbox" />Put On Pajamas</label>
+        <label><input type="checkbox" id="putOnPajamas" />Put On Pajamas</label>
       </li>
       <li>
-        <label><input type="checkbox" />Pickup Toys</label>
+        <label><input type="checkbox" id="pickupToys" />Pickup Toys</label>
       </li>
       <li>
-        <label><input type="checkbox" />Bedtime Snack</label>
+        <label><input type="checkbox" id="bedtimeSnack" />Bedtime Snack</label>
       </li>
       <li>
-        <label><input type="checkbox" />Brush Teeth</label>
+        <label><input type="checkbox" id="brushTeeth" />Brush Teeth</label>
       </li>
       <li>
-        <label><input type="checkbox" />Storytime!</label>
+        <label><input type="checkbox" id="storytime" />Storytime!</label>
       </li>
       <li>
-        <label><input type="checkbox" />Sing 1 Song</label>
+        <label><input type="checkbox" id="sing1Song" />Sing 1 Song</label>
       </li>
       <li>
-        <label><input type="checkbox" />Go Potty</label>
+        <label><input type="checkbox" id="goPotty" />Go Potty</label>
       </li>
       <li>
-        <label><input type="checkbox" />Get Bedtime Things</label>
+        <label><input type="checkbox" id="getBedtimeThings" />Get Bedtime Things</label>
       </li>
       <li class="graham">
         <h3>Graham's Room</h3>
         <ol class="checklist">
           <li>
-            <label><input type="checkbox" />Drink Water</label>
+            <label><input type="checkbox" id="drinkWater" />Drink Water</label>
           </li>
           <li>
-            <label><input type="checkbox" />Ask 1 Question</label>
+            <label><input type="checkbox" id="ask1QuestionGraham" />Ask 1 Question</label>
           </li>
           <li>
-            <label><input type="checkbox" />Tucky Tucky In</label>
+            <label><input type="checkbox" id="tuckyTuckyIn" />Tucky Tucky In</label>
           </li>
           <li>
-            <label><input type="checkbox" />Sleep</label>
+            <label><input type="checkbox" id="sleepGraham" />Sleep</label>
           </li>
         </ol>
       </li>
@@ -85,19 +92,41 @@
         <h3>Nora's Room</h3>
         <ol class="checklist">
           <li>
-            <label><input type="checkbox" />Carry to Bed</label>
+            <label><input type="checkbox" id="carryToBed" />Carry to Bed</label>
           </li>
           <li>
-            <label><input type="checkbox" />Tuck In</label>
+            <label><input type="checkbox" id="tuckIn" />Tuck In</label>
           </li>
           <li>
-            <label><input type="checkbox" />Ask 1 Question</label>
+            <label><input type="checkbox" id="ask1QuestionNora" />Ask 1 Question</label>
           </li>
           <li>
-            <label><input type="checkbox" />Sleep</label>
+            <label><input type="checkbox" id="sleepNora" />Sleep</label>
           </li>
         </ol>
       </li>
     </ol>
+    <script>
+      document.addEventListener("DOMContentLoaded", (event) => {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.forEach((checkbox) => {
+          const id = checkbox.id;
+          const checked = localStorage.getItem(id) === "true";
+          checkbox.checked = checked;
+
+          checkbox.addEventListener("change", () => {
+            localStorage.setItem(id, checkbox.checked);
+          });
+        });
+
+        document.getElementById("resetButton").addEventListener("click", () => {
+          checkboxes.forEach((checkbox) => {
+            checkbox.checked = false;
+            localStorage.setItem(checkbox.id, false);
+          });
+        });
+      });
+    </script>
   </body>
 </html>
