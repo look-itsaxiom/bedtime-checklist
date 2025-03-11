@@ -43,7 +43,7 @@
   <body>
     <h1>Bedtime Checklist</h1>
     <button id="resetButton">Reset</button>
-    <ol class="checklist">
+    <ol class="checklist" id="checklist">
       <li>
         <label><input type="checkbox" id="eatDinner" />Eat Dinner</label>
       </li>
@@ -92,7 +92,7 @@
         <h3>Nora's Room</h3>
         <ol class="checklist">
           <li>
-            <label><input type="checkbox" id="carryToBed" />Carry to Bed</label>
+            <label><input type="checkbox" id="carryToBed" />Nora gets in Bed</label>
           </li>
           <li>
             <label><input type="checkbox" id="tuckIn" />Tuck In</label>
@@ -126,6 +126,28 @@
             localStorage.setItem(checkbox.id, false);
           });
         });
+
+        // Add "Take a Bath/Shower" item on specific days
+        const today = new Date().getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+        const bathDays = [1, 3, 5]; // Example: Tuesday, Thursday, Saturday
+        if (bathDays.includes(today)) {
+          const checklist = document.getElementById("checklist");
+          const bathItem = document.createElement("li");
+          bathItem.innerHTML = '<label><input type="checkbox" id="takeBath" />Take a Bath/Shower</label>';
+
+          // Find the "Put On Pajamas" item and insert the new item before it
+          const putOnPajamasItem = document.getElementById("putOnPajamas").closest("li");
+          checklist.insertBefore(bathItem, putOnPajamasItem);
+
+          // Restore state for the new item
+          const bathCheckbox = bathItem.querySelector('input[type="checkbox"]');
+          const checked = localStorage.getItem(bathCheckbox.id) === "true";
+          bathCheckbox.checked = checked;
+
+          bathCheckbox.addEventListener("change", () => {
+            localStorage.setItem(bathCheckbox.id, bathCheckbox.checked);
+          });
+        }
       });
     </script>
   </body>
