@@ -37,6 +37,13 @@
         font-size: 1em;
         padding: 10px 20px;
         cursor: pointer;
+        margin-left: 10px;
+      }
+      .skipBathButton {
+        font-size: 1em;
+        padding: 5px 10px;
+        cursor: pointer;
+        margin-left: 10px;
       }
     </style>
   </head>
@@ -129,11 +136,24 @@
 
         // Add "Take a Bath/Shower" item on specific days
         const today = new Date().getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-        const bathDays = [1, 3, 5]; // Example: Tuesday, Thursday, Saturday
-        if (bathDays.includes(today)) {
+        const bathDays = [1, 3, 5]; // Example: Monday, Wednesday, Friday
+        const skipBathKey = `skipBath_${today}`;
+        const skipBath = localStorage.getItem(skipBathKey) === "true";
+
+        if (bathDays.includes(today) && !skipBath) {
           const checklist = document.getElementById("checklist");
           const bathItem = document.createElement("li");
           bathItem.innerHTML = '<label><input type="checkbox" id="takeBath" />Take a Bath/Shower</label>';
+
+          // Create the "Skip Bath/Shower" button
+          const skipBathButton = document.createElement("button");
+          skipBathButton.id = "skipBathButton";
+          skipBathButton.className = "skipBathButton";
+          skipBathButton.textContent = "Skip Bath/Shower";
+          skipBathButton.style.display = "inline-block";
+
+          // Append the button to the bath item
+          bathItem.appendChild(skipBathButton);
 
           // Find the "Put On Pajamas" item and insert the new item before it
           const putOnPajamasItem = document.getElementById("putOnPajamas").closest("li");
@@ -146,6 +166,12 @@
 
           bathCheckbox.addEventListener("change", () => {
             localStorage.setItem(bathCheckbox.id, bathCheckbox.checked);
+          });
+
+          skipBathButton.addEventListener("click", () => {
+            bathItem.remove();
+            localStorage.setItem(skipBathKey, "true");
+            localStorage.removeItem("takeBath");
           });
         }
       });
